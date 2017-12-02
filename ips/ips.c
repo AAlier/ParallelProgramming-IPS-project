@@ -237,13 +237,12 @@ void ips_update_image(
             pool->last_task = task;
             pool->size++;
 			
+			pthread_cond_broadcast(&Got_Resources_Condition);
 		//	printf("Producer: incrementing the size of the pool : %d and signaling\n", pool->size);
 		//	printf("Producer: unlocking the mutex\n");
 			pthread_mutex_unlock(&Resource_Counter_Mutex);
         }
     }
-	//pthread_mutex_unlock(&Resource_Counter_Mutex);
-	pthread_cond_broadcast(&Got_Resources_Condition);
 }
 
 void ips_set_brightness_and_contrast(ips_task_t *task)
@@ -325,7 +324,7 @@ void ips_apply_sobel(ips_task_t *task){
                             ((png_bytep)&(input_image->rows[y + 1][(x + 1) * channels]))[channel];
                     destination_pixel[channel] = (int)(sqrt(gx * gx + gy * gy));
                 }
-				/* 
+				 
                 for (channel = 0; channel < 3; ++channel) {
                     destination_pixel[channel] = (int)(sqrt(gx * gx + gy * gy));
 					float newValue = new_image_contrast * destination_pixel[channel] + new_image_brightness;
@@ -334,7 +333,7 @@ void ips_apply_sobel(ips_task_t *task){
                     maximum_channel_value = fmax(maximum_channel_value, newValue);
                     destination_pixel[channel] =
                     (png_byte) newValue; 
-                } */
+                } 
                 gx = 0;
                 gy = 0;
 
